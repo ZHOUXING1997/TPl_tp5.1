@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html class="">
+<head>
+    <!--编码格式-->
+    <meta charset="{block name='charset'}编码格式{/block}">
+    <!--meta标签-->
+    {include file='manage@common/include_meta' /}
+    <title>{block name="title"}tpl_tp5.1{/block}</title>
+    <!--css文件-->
+    {include file='manage@common/include_style' /}
+    <!--js文件-->
+    {include file='manage@common/include_js' /}
+    <!--自定义meta-->
+    {block name="custom_head"}自定义meta{/block}
+</head>
+
+ <body>
+<!--头部-->
+{block name="header"}
+{include file='manage@common/tpl_header' /}
+{/block}
+
+<!--侧边栏-->
+{block name="sidebar"}
+{include file='manage@common/tpl_sidebar' /}
+{/block}
+
+<!--主体内容-->
+{block name="content"}
+内容
+{/block}
+
+<!--底部-->
+{block name="footer"}
+{include file='manage@common/tpl_footer' /}
+{/block}
+<script>
+    function formAjax (data, succCallBack, errorCallBack) {
+        var formData = data.field;
+        var method = data.form.method ? data.form.method : 'post';
+        var url = data.form.action;
+        $.ajax({
+            url:url,
+            type:method,
+            data:formData,
+            beforeSend:function () {
+                this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
+            },
+            success:function(result, statusText, xhr, $form){
+                if (result.code == 0) {
+                    layer.msg(result.msg, {icon: 1, time: 1500});
+                    if (result.data && result.data.url) {
+                        location.href = result.data.url;
+                    } else {
+                        if (succCallBack && typeof(succCallBack) == "function") {
+                            succCallBack(result);
+                        } else {
+                            window.parent.location.reload();
+                        }
+                    }
+                } else {
+                    layer.msg(result.msg, {icon: 2, time: 1500});
+                    if (errorCallBack && typeof(errorCallBack) == "function") {
+                        errorCallBack(result);
+                    } else {
+                        window.parent.location.reload();
+                    }
+                }
+            },
+            error: function (error) {
+            },
+            complete: function (result) {
+                layer.close(this.layerIndex);
+            },
+        });
+    }
+</script>
+</body>
+</html>
