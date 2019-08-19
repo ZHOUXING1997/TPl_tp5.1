@@ -34,7 +34,9 @@
 {block name="footer"}
 {include file='manage@common/tpl_footer' /}
 {/block}
-<script>
+
+{load href="__X-ADMIN__/js/function.js" /}
+
     function formAjax (data, succCallBack, errorCallBack) {
         var formData = data.field;
         var method = data.form.method ? data.form.method : 'post';
